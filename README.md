@@ -11,10 +11,9 @@ A modular, hexagonal-architecture Go SDK for publishing notifications via NATS.
 ## Project Structure
 ```
 notification-sdk/
-  domain/                # Core domain types (Notification, errors)
+  internal/domain/       # Core domain types (Notification, errors)
   port/                  # Port interfaces (NotificationPublisherPort)
   adapter/nats/          # NATS implementation of the publisher
-  test/                  # Tests for the SDK
   go.mod, go.sum         # Go module files
 ```
 
@@ -26,6 +25,8 @@ go get github.com/ahyaghoubi/notification-sdk
 ```
 
 ### 2. Import and Use
+> **Note:** The `internal/domain` package can only be imported from within your own module due to Go's internal package rules.
+
 ```go
 import (
     "github.com/ahyaghoubi/notification-sdk/adapter/nats"
@@ -48,11 +49,8 @@ func main() {
 
 ### 3. Run Tests
 ```sh
-go test ./test/...
+go test ./...
 ```
 
 ## Extending
 - Implement your own adapter by creating a new package in `adapter/` and implementing the `port.NotificationPublisherPort` interface.
-
-## License
-MIT 
