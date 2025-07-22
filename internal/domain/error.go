@@ -24,3 +24,5 @@ func NewError(code int32, message string) error {
 func (e Error) Error() string {
 	return e.Message
 }
+
+// ...existing code...

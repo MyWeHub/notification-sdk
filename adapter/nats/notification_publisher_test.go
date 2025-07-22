@@ -1,12 +1,11 @@
-package test
+package natsadapter
 
 import (
 	"encoding/json"
 	"testing"
 	"time"
 
-	natsadapter "github.com/ahyaghoubi/notification-sdk/adapter/nats"
-	"github.com/ahyaghoubi/notification-sdk/domain"
+	"github.com/ahyaghoubi/notification-sdk/internal/domain"
 	"github.com/nats-io/nats.go"
 	"github.com/stretchr/testify/assert"
 )
@@ -18,7 +17,7 @@ func TestPublishNotification(t *testing.T) {
 	}
 	defer nc.Close()
 
-	publisher, err := natsadapter.NewNotificationPublisher(nats.DefaultURL, "test-notifications")
+	publisher, err := NewNotificationPublisher(nats.DefaultURL, "test-notifications")
 	if err != nil {
 		t.Fatalf("Failed to create notification publisher: %v", err)
 	}
@@ -70,7 +69,7 @@ func TestPublishCustomNotification(t *testing.T) {
 	}
 	defer nc.Close()
 
-	publisher, err := natsadapter.NewNotificationPublisher(nats.DefaultURL, "test-notifications")
+	publisher, err := NewNotificationPublisher(nats.DefaultURL, "test-notifications")
 	if err != nil {
 		t.Fatalf("Failed to create notification publisher: %v", err)
 	}
@@ -129,7 +128,7 @@ func TestPublishNotificationValidation(t *testing.T) {
 	}
 	defer nc.Close()
 
-	publisher, err := natsadapter.NewNotificationPublisher(nats.DefaultURL, "test-notifications")
+	publisher, err := NewNotificationPublisher(nats.DefaultURL, "test-notifications")
 	if err != nil {
 		t.Fatalf("Failed to create notification publisher: %v", err)
 	}
@@ -155,7 +154,7 @@ func TestPublishCustomNotificationValidation(t *testing.T) {
 	}
 	defer nc.Close()
 
-	publisher, err := natsadapter.NewNotificationPublisher(nats.DefaultURL, "test-notifications")
+	publisher, err := NewNotificationPublisher(nats.DefaultURL, "test-notifications")
 	if err != nil {
 		t.Fatalf("Failed to create notification publisher: %v", err)
 	}

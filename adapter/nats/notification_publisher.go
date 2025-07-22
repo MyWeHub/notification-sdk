@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/ahyaghoubi/notification-sdk/domain"
+	"github.com/ahyaghoubi/notification-sdk/internal/domain"
 	"github.com/google/uuid"
 	"github.com/nats-io/nats.go"
 )

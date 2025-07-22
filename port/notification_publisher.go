@@ -1,6 +1,6 @@
 package port
 
-import "github.com/ahyaghoubi/notification-sdk/domain"
+import "github.com/ahyaghoubi/notification-sdk/internal/domain"
 
 type NotificationPublisherPort interface {
 	PublishNotification(clientID string, message string, notificationType domain.NotificationType, source string) error

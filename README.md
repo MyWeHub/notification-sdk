@@ -29,7 +29,7 @@ go get github.com/ahyaghoubi/notification-sdk
 ```go
 import (
     "github.com/ahyaghoubi/notification-sdk/adapter/nats"
-    "github.com/ahyaghoubi/notification-sdk/domain"
+    "github.com/ahyaghoubi/notification-sdk/internal/domain"
 )
 
 func main() {
