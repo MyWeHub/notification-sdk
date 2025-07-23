@@ -5,8 +5,6 @@ import (
 	"github.com/ahyaghoubi/notification-sdk/internal/utils"
 	"github.com/ahyaghoubi/notification-sdk/internal/validation"
 
-	"github.com/getsentry/sentry-go"
-
 	notification "github.com/ahyaghoubi/notification-sdk"
 	"github.com/google/uuid"
 	"github.com/nats-io/nats.go"
@@ -22,14 +20,12 @@ type Publisher struct {
 func NewPublisher(natsURL, subjectPrefix string) (*Publisher, error) {
 	nc, err := natsutil.ConnectWithRetry(natsURL, 3)
 	if err != nil {
-		sentry.CaptureException(err)
 		return nil, err
 	}
 
 	js, err := natsutil.CreateJetStreamContext(nc)
 	if err != nil {
 		nc.Close() // Clean up connection on error
-		sentry.CaptureException(err)
 		return nil, err
 	}
 
@@ -44,14 +40,12 @@ func NewPublisher(natsURL, subjectPrefix string) (*Publisher, error) {
 func NewPublisherWithOptions(natsURL, subjectPrefix string, opts ...nats.Option) (*Publisher, error) {
 	nc, err := natsutil.ConnectWithCustomOptions(natsURL, opts...)
 	if err != nil {
-		sentry.CaptureException(err)
 		return nil, err
 	}
 
 	js, err := natsutil.CreateJetStreamContext(nc)
 	if err != nil {
 		nc.Close()
-		sentry.CaptureException(err)
 		return nil, err
 	}
 
@@ -114,7 +108,6 @@ func (p *Publisher) publishNotification(notif *notification.Notification) error 
 	// Use internal JSON utility
 	data, err := utils.MarshalNotification(notif)
 	if err != nil {
-		sentry.CaptureException(err)
 		return err
 	}
 
@@ -124,14 +117,12 @@ func (p *Publisher) publishNotification(notif *notification.Notification) error 
 	// Validate subject before publishing
 	if !natsutil.ValidateSubject(subject) {
 		err := notification.NewError(notification.InvalidArguments, "invalid subject: "+subject)
-		sentry.CaptureException(err)
 		return err
 	}
 
 	err = p.nc.Publish(subject, data)
 	if err != nil {
 		err := notification.NewError(notification.Internal, "failed to publish notification: "+err.Error())
-		sentry.CaptureException(err)
 		return err
 	}
 
