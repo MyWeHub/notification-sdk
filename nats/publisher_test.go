@@ -1,11 +1,11 @@
-package natsadapter
+package nats
 
 import (
 	"encoding/json"
 	"testing"
 	"time"
 
-	"github.com/ahyaghoubi/notification-sdk/internal/domain"
+	notification "github.com/ahyaghoubi/notification-sdk"
 	"github.com/nats-io/nats.go"
 	"github.com/stretchr/testify/assert"
 )
@@ -17,16 +17,16 @@ func TestPublishNotification(t *testing.T) {
 	}
 	defer nc.Close()
 
-	publisher, err := NewNotificationPublisher(nats.DefaultURL, "test-notifications")
+	publisher, err := NewPublisher(nats.DefaultURL, "test-notifications")
 	if err != nil {
 		t.Fatalf("Failed to create notification publisher: %v", err)
 	}
 	defer publisher.Close()
 
 	subject := "test-notifications.test-client"
-	ch := make(chan *domain.Notification, 1)
+	ch := make(chan *notification.Notification, 1)
 	subscription, err := nc.Subscribe(subject, func(msg *nats.Msg) {
-		var n domain.Notification
+		var n notification.Notification
 		if err := json.Unmarshal(msg.Data, &n); err != nil {
 			t.Errorf("Failed to unmarshal notification: %v", err)
 			return
@@ -43,7 +43,7 @@ func TestPublishNotification(t *testing.T) {
 	}
 	time.Sleep(100 * time.Millisecond)
 
-	err = publisher.PublishNotification("test-client", "Test message", domain.TypeInfo, "system")
+	err = publisher.PublishNotification("test-client", "Test message", notification.TypeInfo, "system")
 	if err != nil {
 		t.Fatalf("Failed to publish notification: %v", err)
 	}
@@ -52,7 +52,7 @@ func TestPublishNotification(t *testing.T) {
 	case n := <-ch:
 		assert.Equal(t, "test-client", n.ClientID)
 		assert.Equal(t, "Test message", n.Message)
-		assert.Equal(t, domain.TypeInfo, n.Type)
+		assert.Equal(t, notification.TypeInfo, n.Type)
 		assert.Equal(t, "system", n.Source)
 		assert.False(t, n.Read)
 		assert.NotEmpty(t, n.ID)
@@ -69,16 +69,16 @@ func TestPublishCustomNotification(t *testing.T) {
 	}
 	defer nc.Close()
 
-	publisher, err := NewNotificationPublisher(nats.DefaultURL, "test-notifications")
+	publisher, err := NewPublisher(nats.DefaultURL, "test-notifications")
 	if err != nil {
 		t.Fatalf("Failed to create notification publisher: %v", err)
 	}
 	defer publisher.Close()
 
 	subject := "test-notifications.test-client"
-	ch := make(chan *domain.Notification, 1)
+	ch := make(chan *notification.Notification, 1)
 	subscription, err := nc.Subscribe(subject, func(msg *nats.Msg) {
-		var n domain.Notification
+		var n notification.Notification
 		if err := json.Unmarshal(msg.Data, &n); err != nil {
 			t.Errorf("Failed to unmarshal notification: %v", err)
 			return
@@ -95,9 +95,9 @@ func TestPublishCustomNotification(t *testing.T) {
 	}
 	time.Sleep(100 * time.Millisecond)
 
-	customNotification := &domain.Notification{
+	customNotification := &notification.Notification{
 		Message:  "Custom test message",
-		Type:     domain.TypeWarning,
+		Type:     notification.TypeWarning,
 		ClientID: "test-client",
 		Source:   "custom-test",
 	}
@@ -111,7 +111,7 @@ func TestPublishCustomNotification(t *testing.T) {
 	case n := <-ch:
 		assert.Equal(t, "test-client", n.ClientID)
 		assert.Equal(t, "Custom test message", n.Message)
-		assert.Equal(t, domain.TypeWarning, n.Type)
+		assert.Equal(t, notification.TypeWarning, n.Type)
 		assert.Equal(t, "custom-test", n.Source)
 		assert.False(t, n.Read)
 		assert.NotEmpty(t, n.ID)
@@ -128,21 +128,21 @@ func TestPublishNotificationValidation(t *testing.T) {
 	}
 	defer nc.Close()
 
-	publisher, err := NewNotificationPublisher(nats.DefaultURL, "test-notifications")
+	publisher, err := NewPublisher(nats.DefaultURL, "test-notifications")
 	if err != nil {
 		t.Fatalf("Failed to create notification publisher: %v", err)
 	}
 	defer publisher.Close()
 
-	err = publisher.PublishNotification("", "Test message", domain.TypeInfo, "system")
+	err = publisher.PublishNotification("", "Test message", notification.TypeInfo, "system")
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "clientID cannot be empty")
 
-	err = publisher.PublishNotification("test-client", "", domain.TypeInfo, "system")
+	err = publisher.PublishNotification("test-client", "", notification.TypeInfo, "system")
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "message cannot be empty")
 
-	err = publisher.PublishNotification("test-client", "Test message", domain.TypeInfo, "")
+	err = publisher.PublishNotification("test-client", "Test message", notification.TypeInfo, "")
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "source cannot be empty")
 }
@@ -154,15 +154,15 @@ func TestPublishCustomNotificationValidation(t *testing.T) {
 	}
 	defer nc.Close()
 
-	publisher, err := NewNotificationPublisher(nats.DefaultURL, "test-notifications")
+	publisher, err := NewPublisher(nats.DefaultURL, "test-notifications")
 	if err != nil {
 		t.Fatalf("Failed to create notification publisher: %v", err)
 	}
 	defer publisher.Close()
 
-	err = publisher.PublishCustomNotification("", &domain.Notification{
+	err = publisher.PublishCustomNotification("", &notification.Notification{
 		Message: "Test message",
-		Type:    domain.TypeInfo,
+		Type:    notification.TypeInfo,
 	})
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "clientID cannot be empty")
