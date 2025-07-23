@@ -3,6 +3,8 @@ package utils
 import (
 	"encoding/json"
 
+	"github.com/getsentry/sentry-go"
+
 	notification "github.com/ahyaghoubi/notification-sdk"
 )
 
@@ -10,7 +12,9 @@ import (
 func MarshalNotification(n *notification.Notification) ([]byte, error) {
 	data, err := json.Marshal(n)
 	if err != nil {
-		return nil, notification.NewError(notification.Internal, "failed to marshal notification: "+err.Error())
+		errWrap := notification.NewError(notification.Internal, "failed to marshal notification: "+err.Error())
+		sentry.CaptureException(errWrap)
+		return nil, errWrap
 	}
 	return data, nil
 }
@@ -19,7 +23,9 @@ func MarshalNotification(n *notification.Notification) ([]byte, error) {
 func UnmarshalNotification(data []byte) (*notification.Notification, error) {
 	var n notification.Notification
 	if err := json.Unmarshal(data, &n); err != nil {
-		return nil, notification.NewError(notification.Internal, "failed to unmarshal notification: "+err.Error())
+		errWrap := notification.NewError(notification.Internal, "failed to unmarshal notification: "+err.Error())
+		sentry.CaptureException(errWrap)
+		return nil, errWrap
 	}
 	return &n, nil
 }

@@ -3,6 +3,8 @@ package natsutil
 import (
 	"time"
 
+	"github.com/getsentry/sentry-go"
+
 	notification "github.com/ahyaghoubi/notification-sdk"
 	"github.com/nats-io/nats.go"
 )
@@ -35,14 +37,18 @@ func ConnectWithRetry(url string, maxRetries int) (*nats.Conn, error) {
 		}
 	}
 
-	return nil, notification.NewError(notification.Internal, "failed to connect to NATS after retries: "+lastErr.Error())
+	err := notification.NewError(notification.Internal, "failed to connect to NATS after retries: "+lastErr.Error())
+	sentry.CaptureException(err)
+	return nil, err
 }
 
 // ConnectWithCustomOptions connects to NATS with custom options
 func ConnectWithCustomOptions(url string, opts ...nats.Option) (*nats.Conn, error) {
 	nc, err := nats.Connect(url, opts...)
 	if err != nil {
-		return nil, notification.NewError(notification.Internal, "failed to connect to NATS: "+err.Error())
+		errWrap := notification.NewError(notification.Internal, "failed to connect to NATS: "+err.Error())
+		sentry.CaptureException(errWrap)
+		return nil, errWrap
 	}
 	return nc, nil
 }
@@ -51,7 +57,9 @@ func ConnectWithCustomOptions(url string, opts ...nats.Option) (*nats.Conn, erro
 func CreateJetStreamContext(nc *nats.Conn) (nats.JetStreamContext, error) {
 	js, err := nc.JetStream()
 	if err != nil {
-		return nil, notification.NewError(notification.Internal, "failed to create JetStream context: "+err.Error())
+		errWrap := notification.NewError(notification.Internal, "failed to create JetStream context: "+err.Error())
+		sentry.CaptureException(errWrap)
+		return nil, errWrap
 	}
 	return js, nil
 }

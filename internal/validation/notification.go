@@ -3,21 +3,29 @@ package validation
 import (
 	"strings"
 
+	"github.com/getsentry/sentry-go"
+
 	notification "github.com/ahyaghoubi/notification-sdk"
 )
 
 // ValidateClientID checks if a client ID is valid
 func ValidateClientID(clientID string) error {
 	if clientID == "" {
-		return notification.NewError(notification.InvalidArguments, "clientID cannot be empty")
+		err := notification.NewError(notification.InvalidArguments, "clientID cannot be empty")
+		sentry.CaptureException(err)
+		return err
 	}
 
 	if len(clientID) > 255 {
-		return notification.NewError(notification.InvalidArguments, "clientID cannot exceed 255 characters")
+		err := notification.NewError(notification.InvalidArguments, "clientID cannot exceed 255 characters")
+		sentry.CaptureException(err)
+		return err
 	}
 
 	if strings.Contains(clientID, " ") {
-		return notification.NewError(notification.InvalidArguments, "clientID cannot contain spaces")
+		err := notification.NewError(notification.InvalidArguments, "clientID cannot contain spaces")
+		sentry.CaptureException(err)
+		return err
 	}
 
 	return nil
@@ -26,11 +34,15 @@ func ValidateClientID(clientID string) error {
 // ValidateMessage checks if a message is valid
 func ValidateMessage(message string) error {
 	if message == "" {
-		return notification.NewError(notification.InvalidArguments, "message cannot be empty")
+		err := notification.NewError(notification.InvalidArguments, "message cannot be empty")
+		sentry.CaptureException(err)
+		return err
 	}
 
 	if len(message) > 10000 {
-		return notification.NewError(notification.InvalidArguments, "message cannot exceed 10000 characters")
+		err := notification.NewError(notification.InvalidArguments, "message cannot exceed 10000 characters")
+		sentry.CaptureException(err)
+		return err
 	}
 
 	return nil
@@ -39,11 +51,15 @@ func ValidateMessage(message string) error {
 // ValidateSource checks if a source is valid
 func ValidateSource(source string) error {
 	if source == "" {
-		return notification.NewError(notification.InvalidArguments, "source cannot be empty")
+		err := notification.NewError(notification.InvalidArguments, "source cannot be empty")
+		sentry.CaptureException(err)
+		return err
 	}
 
 	if len(source) > 100 {
-		return notification.NewError(notification.InvalidArguments, "source cannot exceed 100 characters")
+		err := notification.NewError(notification.InvalidArguments, "source cannot exceed 100 characters")
+		sentry.CaptureException(err)
+		return err
 	}
 
 	return nil
@@ -52,7 +68,9 @@ func ValidateSource(source string) error {
 // ValidateNotification performs comprehensive validation on a notification
 func ValidateNotification(n *notification.Notification) error {
 	if n == nil {
-		return notification.NewError(notification.InvalidArguments, "notification cannot be nil")
+		err := notification.NewError(notification.InvalidArguments, "notification cannot be nil")
+		sentry.CaptureException(err)
+		return err
 	}
 
 	if err := ValidateClientID(n.ClientID); err != nil {
