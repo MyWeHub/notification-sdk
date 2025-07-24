@@ -1,6 +1,6 @@
 module github.com/MyWeHub/notification-sdk
 
-go 1.24.5
+go 1.24.4
 
 require (
 	github.com/getsentry/sentry-go v0.34.1
