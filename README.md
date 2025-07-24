@@ -20,7 +20,7 @@ A modular, hexagonal-architecture Go SDK for publishing notifications via NATS a
 ## 📦 Installation
 
 ```
-go get github.com/ahyaghoubi/notification-sdk@latest
+go get github.com/MyWeHub/notification-sdk@latest
 ```
 
 ## 🏃 Quick Start
@@ -31,8 +31,8 @@ package main
 import (
     "log"
     
-    notification "github.com/ahyaghoubi/notification-sdk"
-    "github.com/ahyaghoubi/notification-sdk/nats"
+    notification "github.com/MyWeHub/notification-sdk"
+    "github.com/MyWeHub/notification-sdk/nats"
 )
 
 func main() {
@@ -273,8 +273,8 @@ package main
 
 import (
     "log"
-    notification "github.com/ahyaghoubi/notification-sdk"
-    "github.com/ahyaghoubi/notification-sdk/nats"
+    notification "github.com/MyWeHub/notification-sdk"
+    "github.com/MyWeHub/notification-sdk/nats"
 )
 
 func main() {
@@ -371,7 +371,7 @@ mkdir kafka
 package kafka
 
 import (
-    notification "github.com/ahyaghoubi/notification-sdk"
+    notification "github.com/MyWeHub/notification-sdk"
 )
 
 type Publisher struct {
@@ -407,7 +407,7 @@ package kafka
 
 import (
     "testing"
-    notification "github.com/ahyaghoubi/notification-sdk"
+    notification "github.com/MyWeHub/notification-sdk"
 )
 
 func TestKafkaPublisher(t *testing.T) {
@@ -418,7 +418,7 @@ func TestKafkaPublisher(t *testing.T) {
 4. **Usage:**
 
 ```
-import "github.com/ahyaghoubi/notification-sdk/kafka"
+import "github.com/MyWeHub/notification-sdk/kafka"
 
 publisher, err := kafka.NewPublisher([]string{"localhost:9092"}, "notifications")
 // Use the same PublisherPort interface
@@ -452,7 +452,7 @@ We welcome contributions! Please follow these steps:
 
 ```
 # Clone the repository
-git clone https://github.com/ahyaghoubi/notification-sdk.git
+git clone https://github.com/MyWeHub/notification-sdk.git
 cd notification-sdk
 
 # Install dependencies

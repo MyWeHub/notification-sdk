@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	notification "github.com/ahyaghoubi/notification-sdk"
+	notification "github.com/MyWeHub/notification-sdk"
 )
 
 func TestValidateClientID(t *testing.T) {

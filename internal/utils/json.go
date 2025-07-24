@@ -3,7 +3,7 @@ package utils
 import (
 	"encoding/json"
 
-	notification "github.com/ahyaghoubi/notification-sdk"
+	notification "github.com/MyWeHub/notification-sdk"
 )
 
 // MarshalNotification safely marshals a notification to JSON

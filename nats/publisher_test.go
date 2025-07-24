@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	notification "github.com/ahyaghoubi/notification-sdk"
+	notification "github.com/MyWeHub/notification-sdk"
 	"github.com/nats-io/nats.go"
 	"github.com/stretchr/testify/assert"
 )

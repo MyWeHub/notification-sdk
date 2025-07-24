@@ -1,11 +1,11 @@
 package nats
 
 import (
-	"github.com/ahyaghoubi/notification-sdk/internal/natsutil"
-	"github.com/ahyaghoubi/notification-sdk/internal/utils"
-	"github.com/ahyaghoubi/notification-sdk/internal/validation"
+	"github.com/MyWeHub/notification-sdk/internal/natsutil"
+	"github.com/MyWeHub/notification-sdk/internal/utils"
+	"github.com/MyWeHub/notification-sdk/internal/validation"
 
-	notification "github.com/ahyaghoubi/notification-sdk"
+	notification "github.com/MyWeHub/notification-sdk"
 	"github.com/google/uuid"
 	"github.com/nats-io/nats.go"
 )

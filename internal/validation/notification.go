@@ -3,7 +3,7 @@ package validation
 import (
 	"strings"
 
-	notification "github.com/ahyaghoubi/notification-sdk"
+	notification "github.com/MyWeHub/notification-sdk"
 )
 
 // ValidateClientID checks if a client ID is valid

@@ -1,4 +1,4 @@
-module github.com/ahyaghoubi/notification-sdk
+module github.com/MyWeHub/notification-sdk
 
 go 1.24.5
 

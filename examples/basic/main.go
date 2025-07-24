@@ -7,8 +7,8 @@ import (
 
 	"github.com/getsentry/sentry-go"
 
-	notification "github.com/ahyaghoubi/notification-sdk"
-	"github.com/ahyaghoubi/notification-sdk/nats"
+	notification "github.com/MyWeHub/notification-sdk"
+	"github.com/MyWeHub/notification-sdk/nats"
 )
 
 func main() {

@@ -3,7 +3,7 @@ package natsutil
 import (
 	"time"
 
-	notification "github.com/ahyaghoubi/notification-sdk"
+	notification "github.com/MyWeHub/notification-sdk"
 	"github.com/nats-io/nats.go"
 )
 
