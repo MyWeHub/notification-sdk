@@ -2,8 +2,6 @@ module github.com/MyWeHub/notification-sdk
 
 go 1.23.0
 
-toolchain go1.24.5
-
 require (
 	github.com/getsentry/sentry-go v0.34.1
 	github.com/google/uuid v1.6.0
