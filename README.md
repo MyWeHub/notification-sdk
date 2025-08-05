@@ -46,6 +46,7 @@ func main() {
     // Publish a notification
     err = publisher.PublishNotification(
         "client-123",              // Client ID
+        "Welcome!",                // Title
         "Hello World!",            // Message
         notification.TypeInfo,     // Notification type
         "my-service",             // Source service
@@ -72,6 +73,7 @@ defer publisher.Close()
 // Simple notification
 err = publisher.PublishNotification(
     "user-456",                    // Client/User ID
+    "Order Update",                // Title
     "Your order has been shipped", // Message
     notification.TypeSuccess,      // Type
     "order-service",              // Source
@@ -86,6 +88,7 @@ if err != nil {
 ```
 // Create a custom notification with additional fields
 customNotification := &notification.Notification{
+    Title:   "System Alert",
     Message: "System maintenance scheduled",
     Type:    notification.TypeWarning,
     Source:  "admin-panel",

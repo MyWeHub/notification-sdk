@@ -50,9 +50,31 @@ func TestValidateMessage(t *testing.T) {
 	}
 }
 
+func TestValidateTitle(t *testing.T) {
+	tests := []struct {
+		name    string
+		title   string
+		wantErr bool
+	}{
+		{"valid title", "Test Title", false},
+		{"empty title", "", true},
+		{"too long title", strings.Repeat("a", 256), true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := ValidateTitle(tt.title)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ValidateTitle() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestValidateNotification(t *testing.T) {
 	validNotification := &notification.Notification{
 		ClientID: "client-123",
+		Title:    "Test Title",
 		Message:  "Test message",
 		Source:   "test",
 	}
@@ -64,9 +86,10 @@ func TestValidateNotification(t *testing.T) {
 	}{
 		{"valid notification", validNotification, false},
 		{"nil notification", nil, true},
-		{"invalid client ID", &notification.Notification{ClientID: "", Message: "test", Source: "test"}, true},
-		{"invalid message", &notification.Notification{ClientID: "test", Message: "", Source: "test"}, true},
-		{"invalid source", &notification.Notification{ClientID: "test", Message: "test", Source: ""}, true},
+		{"invalid client ID", &notification.Notification{ClientID: "", Title: "test", Message: "test", Source: "test"}, true},
+		{"invalid title", &notification.Notification{ClientID: "test", Title: "", Message: "test", Source: "test"}, true},
+		{"invalid message", &notification.Notification{ClientID: "test", Title: "test", Message: "", Source: "test"}, true},
+		{"invalid source", &notification.Notification{ClientID: "test", Title: "test", Message: "test", Source: ""}, true},
 	}
 
 	for _, tt := range tests {

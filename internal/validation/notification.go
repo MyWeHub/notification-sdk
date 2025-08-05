@@ -41,6 +41,21 @@ func ValidateMessage(message string) error {
 	return nil
 }
 
+// ValidateTitle checks if a title is valid
+func ValidateTitle(title string) error {
+	if title == "" {
+		err := notification.NewError(notification.InvalidArguments, "title cannot be empty")
+		return err
+	}
+
+	if len(title) > 255 {
+		err := notification.NewError(notification.InvalidArguments, "title cannot exceed 255 characters")
+		return err
+	}
+
+	return nil
+}
+
 // ValidateSource checks if a source is valid
 func ValidateSource(source string) error {
 	if source == "" {
@@ -64,6 +79,10 @@ func ValidateNotification(n *notification.Notification) error {
 	}
 
 	if err := ValidateClientID(n.ClientID); err != nil {
+		return err
+	}
+
+	if err := ValidateTitle(n.Title); err != nil {
 		return err
 	}
 

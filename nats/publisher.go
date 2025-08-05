@@ -56,9 +56,12 @@ func NewPublisherWithOptions(natsURL, subjectPrefix string, opts ...nats.Option)
 	}, nil
 }
 
-func (p *Publisher) PublishNotification(clientID string, message string, notificationType notification.NotificationType, source string) error {
+func (p *Publisher) PublishNotification(clientID string, title string, message string, notificationType notification.NotificationType, source string) error {
 	// Use internal validation
 	if err := validation.ValidateClientID(clientID); err != nil {
+		return err
+	}
+	if err := validation.ValidateTitle(title); err != nil {
 		return err
 	}
 	if err := validation.ValidateMessage(message); err != nil {
@@ -71,6 +74,7 @@ func (p *Publisher) PublishNotification(clientID string, message string, notific
 	notif := &notification.Notification{
 		ID:        uuid.New().String(),
 		ClientID:  clientID,
+		Title:     title,
 		Message:   message,
 		Type:      notificationType,
 		Read:      false,

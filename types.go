@@ -48,6 +48,7 @@ type Notification struct {
 	ID        string           `json:"id"`
 	ClientID  string           `json:"client_id"`
 	UserID    string           `json:"user_id"`
+	Title     string           `json:"title"`
 	Message   string           `json:"message"`
 	Type      NotificationType `json:"type"`
 	Read      bool             `json:"read"`
@@ -68,7 +69,7 @@ func (n *Notification) MarkAsRead() {
 
 // IsValid checks if the notification has the required fields
 func (n *Notification) IsValid() bool {
-	return n.UserID != "" && n.Message != "" && n.Source != ""
+	return n.UserID != "" && n.Title != "" && n.Message != "" && n.Source != ""
 }
 
 // WorkflowEmailPreference represents email preferences for a workflow

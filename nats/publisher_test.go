@@ -43,7 +43,7 @@ func TestPublishNotification(t *testing.T) {
 	}
 	time.Sleep(100 * time.Millisecond)
 
-	err = publisher.PublishNotification("test-client", "Test message", notification.TypeInfo, "system")
+	err = publisher.PublishNotification("test-client", "Test Title", "Test message", notification.TypeInfo, "system")
 	if err != nil {
 		t.Fatalf("Failed to publish notification: %v", err)
 	}
@@ -51,6 +51,7 @@ func TestPublishNotification(t *testing.T) {
 	select {
 	case n := <-ch:
 		assert.Equal(t, "test-client", n.ClientID)
+		assert.Equal(t, "Test Title", n.Title)
 		assert.Equal(t, "Test message", n.Message)
 		assert.Equal(t, notification.TypeInfo, n.Type)
 		assert.Equal(t, "system", n.Source)
@@ -96,6 +97,7 @@ func TestPublishCustomNotification(t *testing.T) {
 	time.Sleep(100 * time.Millisecond)
 
 	customNotification := &notification.Notification{
+		Title:    "Custom Title",
 		Message:  "Custom test message",
 		Type:     notification.TypeWarning,
 		ClientID: "test-client",
@@ -110,6 +112,7 @@ func TestPublishCustomNotification(t *testing.T) {
 	select {
 	case n := <-ch:
 		assert.Equal(t, "test-client", n.ClientID)
+		assert.Equal(t, "Custom Title", n.Title)
 		assert.Equal(t, "Custom test message", n.Message)
 		assert.Equal(t, notification.TypeWarning, n.Type)
 		assert.Equal(t, "custom-test", n.Source)
@@ -134,15 +137,19 @@ func TestPublishNotificationValidation(t *testing.T) {
 	}
 	defer publisher.Close()
 
-	err = publisher.PublishNotification("", "Test message", notification.TypeInfo, "system")
+	err = publisher.PublishNotification("", "Test Title", "Test message", notification.TypeInfo, "system")
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "clientID cannot be empty")
 
-	err = publisher.PublishNotification("test-client", "", notification.TypeInfo, "system")
+	err = publisher.PublishNotification("test-client", "", "Test message", notification.TypeInfo, "system")
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "title cannot be empty")
+
+	err = publisher.PublishNotification("test-client", "Test Title", "", notification.TypeInfo, "system")
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "message cannot be empty")
 
-	err = publisher.PublishNotification("test-client", "Test message", notification.TypeInfo, "")
+	err = publisher.PublishNotification("test-client", "Test Title", "Test message", notification.TypeInfo, "")
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "source cannot be empty")
 }

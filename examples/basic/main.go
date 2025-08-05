@@ -30,7 +30,7 @@ func main() {
 	defer publisher.Close()
 
 	// Publish a simple notification
-	err = publisher.PublishNotification("client-123", "Hello World!", notification.TypeInfo, "example-app")
+	err = publisher.PublishNotification("client-123", "Welcome!", "Hello World!", notification.TypeInfo, "example-app")
 	if err != nil {
 		sentry.CaptureException(err)
 		log.Fatal("Failed to publish notification:", err)
@@ -40,6 +40,7 @@ func main() {
 
 	// Publish a custom notification
 	customNotification := &notification.Notification{
+		Title:    "System Alert",
 		Message:  "This is a custom notification",
 		Type:     notification.TypeWarning,
 		Source:   "custom-service",
